@@ -13,15 +13,15 @@ export const handleSwipe = (scrollerElement: HTMLElement, callback: (direction: 
 		scrollPosition = scrollerElement.scrollLeft;
 		loopHandle = setTimeout(() => {
 			if (scrollerElement.scrollLeft === scrollPosition) {
-				callback(initialScrollPosition < scrollPosition ? 'Forward' : 'Back', Math.abs(initialScrollPosition-scrollPosition));
+				initialScrollPosition !== scrollPosition && callback(initialScrollPosition > scrollPosition ? 'Forward' : 'Back', Math.abs(initialScrollPosition-scrollPosition));
 			} else {
 				listen();
 			}
 		}, 100);
 	};
 
-	const onTouchStart = () => scrollPosition = scrollerElement.scrollLeft;
-	const onTouchEnd = () => scrollPosition !== scrollerElement.scrollLeft && listen();
+	const onTouchStart = () => initialScrollPosition = scrollerElement.scrollLeft;
+	const onTouchEnd = () => initialScrollPosition !== scrollerElement.scrollLeft && listen();
 
 	scrollerElement.addEventListener('touchstart', onTouchStart);
 	scrollerElement.addEventListener('touchend', onTouchEnd);

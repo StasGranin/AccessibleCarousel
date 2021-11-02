@@ -68,10 +68,12 @@ const Carousel: React.FC<CarouselProps> = ({children, ...props}) => {
 	};
 
 	const onKeyDown = (event: React.KeyboardEvent) => handleKeyboardNavigation(event, carouselSlides, focusedSlideIndex, setFocused);
-	const onArrowButtonMouseDown = (event, slidesToScroll) => animRef.current = handleArrowButtonsNavigation(event, carouselSlides, slidesToScroll, animRef, {
-		duration: settings.scrollDuration,
-		afterScrolling: () => settings.focusOnScroll && setFocused(null, 'Arrow', slidesToScroll > 0 ? 'Previous' : 'Next')
-	});
+	const onArrowButtonMouseDown = (event, slidesToScroll) =>
+		animRef.current = handleArrowButtonsNavigation(event, carouselSlides, slidesToScroll, animRef, {
+			duration: settings.scrollDuration,
+			afterScrolling: () =>
+				settings.focusOnScroll && setFocused(null, 'Arrow', slidesToScroll > 0 ? 'Previous' : 'Next')
+		});
 
 	useEffect(() => {
 		animRef.current = handleSlideFocus(carouselSlides[focusedSlideIndex], settings.scrollDuration, animRef);
