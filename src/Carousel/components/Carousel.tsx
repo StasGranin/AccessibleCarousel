@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
+import React, {useEffect, useMemo, useRef, useState} from "react";
 import Arrow from "./Arrows";
 import Slides from "./Slides";
 import Dots from "./Dots";
@@ -68,10 +68,10 @@ const Carousel: React.FC<CarouselProps> = ({children, ...props}) => {
 	};
 
 	const onKeyDown = (event: React.KeyboardEvent) => handleKeyboardNavigation(event, carouselSlides, focusedSlideIndex, setFocused);
-	const onArrowButtonMouseDown = useCallback((event, slidesToScroll) => animRef.current = handleArrowButtonsNavigation(event, carouselSlides, slidesToScroll, animRef, {
+	const onArrowButtonMouseDown = (event, slidesToScroll) => animRef.current = handleArrowButtonsNavigation(event, carouselSlides, slidesToScroll, animRef, {
 		duration: settings.scrollDuration,
 		afterScrolling: () => settings.focusOnScroll && setFocused(null, 'Arrow', slidesToScroll > 0 ? 'Previous' : 'Next')
-	}), [settings.scrollDuration, settings.focusOnScroll]);
+	});
 
 	useEffect(() => {
 		animRef.current = handleSlideFocus(carouselSlides[focusedSlideIndex], settings.scrollDuration, animRef);
