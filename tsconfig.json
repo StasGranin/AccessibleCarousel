@@ -1,0 +1,28 @@
+{
+  "include": [ "./typings", "./src" ],
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "noImplicitAny": false,
+    "module": "esnext",
+    "target": "es2016",
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "downlevelIteration": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "moduleResolution": "Node",
+    "jsx": "react",
+    "lib": [
+      "es6",
+      "es2015",
+      "es2017",
+      "dom",
+      "esnext"
+    ],
+    "pretty": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "useDefineForClassFields": true
+  }
+}

@@ -1,0 +1,68 @@
+.carousel {
+	--prev-button-opacity: 0;
+	--next-button-opacity: 0;
+
+	position: relative;
+
+	.scroller {
+		position: relative;
+		overflow-y: auto;
+		width: 100%;
+		white-space: nowrap;
+		scroll-snap-type: x mandatory;
+		-webkit-overflow-scrolling: touch;
+
+		&::-webkit-scrollbar {
+			height: 0;
+			background: transparent;
+		}
+
+		.slide {
+			display: inline-block;
+
+			&:focus {
+				outline: none;
+			}
+		}
+	}
+
+	.carouselButton {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 40px;
+		height: 40px;
+		background: gray;
+
+		&.back {
+			left: -60px;
+			opacity: var(--prev-button-opacity);
+		}
+
+		&.forward {
+			right: -60px;
+			opacity: var(--next-button-opacity);
+		}
+	}
+
+	.dots {
+		position: absolute;
+		white-space: nowrap;
+		left: 50%;
+		transform: translateX(-50%);
+		bottom: -40px;
+
+		.dot {
+			display: inline-block;
+			width: 20px;
+			height: 20px;
+			background: #e0e0e0;
+			border-radius: 10px;
+			margin: 5px;
+
+			&.focused {
+				background: #a0a0a0;
+			}
+		}
+	}
+}
