@@ -1,25 +1,34 @@
 import React, {useEffect} from 'react';
 import {render} from 'react-dom';
 
-import Carousel, {CarouselEvent, CustomDotsComponentProps} from './Carousel';
+import Carousel, {CustomDotsComponentProps, SwipeEvent} from './Carousel';
 import './app.scss';
 
 type CarouselItemProps = {
-	onSelectHandler?: (fn: (any) => void) => void;
+	onActionHandler?: (fn: (any) => void) => void;
+	onFocusHandler?: (fn: (any) => void) => void;
 	itemNumber: number
 };
 
-const CarouselItem: React.FC<CarouselItemProps> = ({itemNumber, onSelectHandler}) => {
+const CarouselItem: React.FC<CarouselItemProps> = ({itemNumber, onActionHandler, onFocusHandler}) => {
 	const onClick = () => {
 		console.log(`Clicked item no. ${itemNumber}`);
 	};
 
+	const onFocus = () => {
+		console.log(`Focused item no. ${itemNumber}`);
+	};
+
 	useEffect(() => {
-		onSelectHandler(onClick);
+		onActionHandler(onClick);
+		onFocusHandler(onFocus);
 	}, []);
 
 	return (
-		<div className="carouselTestItem" onClick={onClick} tabIndex={-1}>Test Slide {itemNumber}</div>
+		<div className="carouselTestItem" onClick={onClick} tabIndex={-1}>
+			<div className="text">Carousel slide {itemNumber}</div>
+			<img src={`https://picsum.photos/200?t=${new Date().getTime()}`} alt="random image"/>
+		</div>
 	)
 };
 
@@ -27,8 +36,8 @@ const CustomDots: React.FC<CustomDotsComponentProps> = ({carouselSlides, focused
 	return (<div className="customDots" onClick={() => onAction(focusedIndex+1, 'Dots')}>Press here to focus next item ({focusedIndex+1})</div>)
 }
 
-const onSlideFocus = (event: CarouselEvent) => {
-	console.log('onSlideFocus', event);
+const onCarouselEvent = (eventType: string, event: FocusEvent|SwipeEvent) => {
+	console.log(eventType, event);
 }
 
 const App = (
@@ -36,14 +45,16 @@ const App = (
 		<button>Apple</button>
 			<div className="carouselContainer">
 			<Carousel
+				aria-label="My awesome carousel"
 				slidesToScroll={3}
 				focusOnScroll={true}
-				onSlideFocus={onSlideFocus}
+				onSlideFocus={onCarouselEvent.bind(null, 'onSlideFocus')}
+				onSwipe={onCarouselEvent.bind(null, 'onSwipe')}
 				showArrows={true}
 				showDots={true}
 				/*dots={CustomDots}*/
-				prevArrow={<div className="carouselArrow">&lt;</div>}
-				nextArrow={<div className="carouselArrow">&gt;</div>}>
+				prevArrow={<div className="carouselArrow"/>}
+				nextArrow={<div className="carouselArrow"/>}>
 				<CarouselItem itemNumber={1} />
 				<CarouselItem itemNumber={2} />
 				<CarouselItem itemNumber={3} />

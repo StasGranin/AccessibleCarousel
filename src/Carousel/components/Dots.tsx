@@ -10,7 +10,7 @@ const Dots: React.FC<DotsProps> = ({carouselSlides, focusedIndex, settings: {sho
 				return React.cloneElement(dotsReactElement, {...(dotsReactElement as JSX.Element).props})
 			}
 		} else {
-			return (<ul className="dots">
+			return (<ul className="dots" aria-hidden={true}>
 				{carouselSlides.map((frame, index) =>
 					<li key={index} className={`dot ${index === focusedIndex ? 'focused' : ''}`} tabIndex={-1} onClick={() => onAction(index, 'Dots', index)} />
 				)}

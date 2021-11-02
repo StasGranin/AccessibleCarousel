@@ -6,23 +6,31 @@
 	.carousel {
 		.scroller .slide {
 			.carouselTestItem {
-				width: 100px;
-				height: 100px;
-				padding: 20px;
-				border: 2px solid #a0a0a0;
+				position: relative;
+				width: 200px;
+				height: 200px;
 				border-radius: 5px;
 				background: #e0e0e0;
+				overflow: hidden;
 				margin-right: 10px;
 				scroll-snap-align: start;
+
+				.text {
+					position: absolute;
+					background: #444444;
+					padding: 5px;
+					left: 10px;
+					top: 10px;
+					color: white;
+				}
 			}
 
 			&:last-child .carouselTestItem {
 				margin-right: 0;
 			}
 
-			&:focus .carouselTestItem {
-				border: 2px solid cornflowerblue;
-				background: #c3d3ef;
+			&:focus .carouselTestItem .text {
+				background: #77c20b;
 			}
 		}
 
@@ -32,14 +40,35 @@
 			transform: translateY(-50%);
 			width: 40px;
 			height: 40px;
-			background: gray;
+			background: linear-gradient(#f0f0f0, #cacaca);
+			border: 1px solid #b0b0b0;
+			border-radius: 40px;
+			box-shadow: inset 0 1px 0 0 white;
+			z-index: 1;
+
+			&:after {
+				position: absolute;
+				border: 7px solid transparent;
+				content: '';
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+			}
 
 			&.back {
-				left: -60px;
+				left: -20px;
+				&:after {
+					border-right-color: #444444;
+					margin-left: -5px;
+				}
 			}
 
 			&.forward {
-				right: -60px;
+				right: -20px;
+				&:after {
+					border-left-color: #444444;
+					margin-left: 5px;
+				}
 			}
 		}
 

@@ -1,8 +1,8 @@
 import React from "react";
-import {Callback, CarouselEvent, CarouselSlide, ScrollAnimationOptions, SetFocusFn} from "./types";
+import {Callback, CarouselSlide, ScrollAnimationOptions, SetFocusFn} from "./types";
 import {getSlideElement, scrollSlideToView, scrollXSlides} from "./helpers";
 
-export const handleUserScrolling = (scrollerElement: HTMLElement, callback: SetFocusFn): Callback => {
+export const handleSwipe = (scrollerElement: HTMLElement, callback: (direction: string, distance: number) => void): Callback => {
 	let scrollPosition = null;
 	let initialScrollPosition = scrollerElement.scrollLeft;
 	let loopHandle = null;
@@ -13,7 +13,7 @@ export const handleUserScrolling = (scrollerElement: HTMLElement, callback: SetF
 		scrollPosition = scrollerElement.scrollLeft;
 		loopHandle = setTimeout(() => {
 			if (scrollerElement.scrollLeft === scrollPosition) {
-				callback(null, 'Scroll', initialScrollPosition < scrollPosition ? 'Forward' : 'Back');
+				callback(initialScrollPosition < scrollPosition ? 'Forward' : 'Back', Math.abs(initialScrollPosition-scrollPosition));
 			} else {
 				listen();
 			}
@@ -53,25 +53,23 @@ export const handleKeyboardNavigation = (event: React.KeyboardEvent, carouselSli
 		case 'ArrowLeft':
 		case 'ArrowUp':
 			event.preventDefault();
-			setFocusedIndexFn(focusedIndex > 0 ? focusedIndex - 1 : 0, 'KeyPress', event.key);
+			focusedIndex > 0 && setFocusedIndexFn(focusedIndex - 1, 'KeyPress', event.key);
 			break;
 		case 'ArrowRight':
 		case 'ArrowDown':
 			event.preventDefault();
-			setFocusedIndexFn(focusedIndex < slidesCount-1 ? focusedIndex + 1 : focusedIndex, 'KeyPress', event.key);
+			focusedIndex < slidesCount-1 && setFocusedIndexFn(focusedIndex + 1, 'KeyPress', event.key);
 			break;
 		case 'Enter':
-			carouselSlides[focusedIndex].onSelectHandler && carouselSlides[focusedIndex].onSelectHandler();
+			carouselSlides[focusedIndex].onActionHandler && carouselSlides[focusedIndex].onActionHandler();
 			break;
 	}
 };
 
-export const handleSlideFocus = (carouselSlides: CarouselSlide[], slideIndex: number, animationDuration, scrollingAnimationRef: React.RefObject<Callback>): Callback => {
-	const slide = carouselSlides[slideIndex];
-	const slideFirstElement = getSlideElement(slide);
+export const handleSlideFocus = (slide: CarouselSlide, animationDuration, scrollingAnimationRef: React.RefObject<Callback>): Callback => {
+	const slideElement = getSlideElement(slide);
 
-	slideFirstElement.focus({preventScroll: true});
-	carouselSlides.forEach((slide, index) => getSlideElement(slide).tabIndex = index === slideIndex ? 0 : -1);
+	slideElement !== document.activeElement && slideElement.focus({preventScroll: true});
 
 	return scrollSlideToView(slide, {
 		duration: animationDuration,

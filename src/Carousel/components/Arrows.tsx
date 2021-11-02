@@ -7,6 +7,7 @@ const Arrow: React.FC<ArrowProps> = ({direction, settings, onAction}) => {
 	if (settings.showArrows && component){
 		return React.cloneElement(component, {
 			className: `carouselButton ${direction} ${component.props.className}`,
+			'aria-hidden': true,
 			onMouseDown: (event) => onAction(event, direction === 'back' ? -settings.slidesToScroll : settings.slidesToScroll),
 			tabIndex: -1
 		});
