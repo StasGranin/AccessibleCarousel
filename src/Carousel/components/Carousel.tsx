@@ -2,7 +2,7 @@ import React, {useEffect, useMemo, useRef, useState} from "react";
 import Arrow from "./Arrows";
 import Slides from "./Slides";
 import Dots from "./Dots";
-import {CarouselSlide, CarouselProps, CarouselEvent, SetFocusFn} from '../types'
+import {CarouselSlide, CarouselProps, SetFocusFn} from '../types'
 import {
 	handleArrowButtonsNavigation,
 	handleArrowsOnScroll,
@@ -24,32 +24,24 @@ const Carousel: React.FC<CarouselProps> = ({children, ...props}) => {
 	const prevFocusedSlideIndex = useRef(null);
 	const scrollerRef = useRef<HTMLUListElement>(null);
 	const animRef = useRef(() => {});
-	const carouselSlides: CarouselSlide[] = useMemo(() => {
-		const slides = [];
 
-		React.Children.forEach(children, (child, index) => {
-			if (React.isValidElement(child)) {
-				const slide: CarouselSlide = {
-					child: React.cloneElement(child, {
-						onSelectHandler: fn => {
-							slide.onSelectHandler = fn;
-						}
-					}),
-					ref: React.createRef<HTMLLIElement>(),
-					onSelectHandler: null,
-					onAction: event => {
-						event.preventDefault();
-						getSlideElement(slide).focus({preventScroll: true});
-						setFocused(index, 'Click');
-					}
-				};
-
-				slides.push(slide);
+	const carouselSlides: CarouselSlide[] = useMemo(() => React.Children.map(children, (child, index) => {
+		const slide: CarouselSlide = {
+			child: React.cloneElement((child as JSX.Element), {
+				onSelectHandler: fn => {
+					slide.onSelectHandler = fn;
+				}
+			}),
+			ref: React.createRef<HTMLLIElement>(),
+			onSelectHandler: null,
+			onAction: event => {
+				event.preventDefault();
+				getSlideElement(slide).focus({preventScroll: true});
+				setFocused(index, 'Click');
 			}
-		});
-
-		return slides;
-	}, [children]);
+		};
+		return slide;
+	}), [children]);
 
 	const setFocused: SetFocusFn = (slideIndex, trigger, which) => {
 		if (!slideIndex) {
@@ -70,7 +62,6 @@ const Carousel: React.FC<CarouselProps> = ({children, ...props}) => {
 		});
 	};
 
-	const focusFirstVisibleSlide = (trigger: CarouselEvent['trigger'], which?: string) => !isElementInView(getSlideElement(carouselSlides[focusedSlideIndex])) && setFocused(getFirstVisibleSlideIndex(carouselSlides), trigger, which);
 	const onKeyDown = (event: React.KeyboardEvent) => handleKeyboardNavigation(event, carouselSlides, focusedSlideIndex, setFocused);
 	const onArrowButtonMouseDown = (event, slidesToScroll) => animRef.current = handleArrowButtonsNavigation(event, carouselSlides, slidesToScroll, animRef, {
 		duration: settings.speed,
