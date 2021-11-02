@@ -29,20 +29,13 @@
 	}
 
 	.carouselButton {
-		position: absolute;
-		top: 50%;
-		transform: translateY(-50%);
-		width: 40px;
-		height: 40px;
-		background: gray;
+		cursor: pointer;
 
 		&.back {
-			left: -60px;
 			opacity: var(--prev-button-opacity);
 		}
 
 		&.forward {
-			right: -60px;
 			opacity: var(--next-button-opacity);
 		}
 	}
@@ -61,6 +54,7 @@
 			background: #e0e0e0;
 			border-radius: 10px;
 			margin: 5px;
+			cursor: pointer;
 
 			&.focused {
 				background: #a0a0a0;

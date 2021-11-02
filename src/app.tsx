@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {render} from 'react-dom';
 
-import Carousel, {CarouselEvent} from './Carousel';
+import Carousel, {CarouselEvent, CustomDotsComponentProps} from './Carousel';
 import './app.scss';
 
 type CarouselItemProps = {
@@ -23,6 +23,10 @@ const CarouselItem: React.FC<CarouselItemProps> = ({itemNumber, onSelectHandler}
 	)
 };
 
+const CustomDots: React.FC<CustomDotsComponentProps> = ({carouselSlides, focusedIndex, onAction}) => {
+	return (<div className="customDots" onClick={() => onAction(focusedIndex+1, 'Dots')}>Press here to focus next item ({focusedIndex+1})</div>)
+}
+
 const onSlideFocus = (event: CarouselEvent) => {
 	console.log('onSlideFocus', event);
 }
@@ -35,10 +39,11 @@ const App = (
 				slidesToScroll={3}
 				focusOnScroll={true}
 				onSlideFocus={onSlideFocus}
-				dots={true}
-				arrows={true}
-				prevArrow={<div className="myCustomClass">&lt;</div>}
-				nextArrow={<div className="myCustomClass">&gt;</div>}>
+				showArrows={true}
+				showDots={true}
+				/*dots={CustomDots}*/
+				prevArrow={<div className="carouselArrow">&lt;</div>}
+				nextArrow={<div className="carouselArrow">&gt;</div>}>
 				<CarouselItem itemNumber={1} />
 				<CarouselItem itemNumber={2} />
 				<CarouselItem itemNumber={3} />

@@ -29,15 +29,14 @@ export type CarouselEvent = {
 };
 
 export type CarouselProps = {
-	isMobile?: boolean; // ?
 	slidesToScroll?: number;
 	focusOnScroll?: boolean;
-	speed?: number;
-	arrows?: boolean;
+	scrollDuration?: number;
+	showArrows?: boolean;
 	prevArrow?: JSX.Element;
 	nextArrow?: JSX.Element;
-	dots?: boolean;
-	appendDots?(dots: React.ReactNode): JSX.Element;
+	showDots?: boolean;
+	dots?: (CustomDotsComponentProps) => JSX.Element;
 	onSlideFocus?: (CarouselEvent) => void;
 };
 
@@ -58,3 +57,9 @@ export type DotsProps = {
 	settings: CarouselProps;
 	onAction: SetFocusFn;
 }
+
+export type CustomDotsComponentProps = {
+	carouselSlides: CarouselSlide[];
+	focusedIndex: number;
+	onAction: SetFocusFn;
+};

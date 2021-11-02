@@ -25,23 +25,25 @@ const Carousel: React.FC<CarouselProps> = ({children, ...props}) => {
 	const scrollerRef = useRef<HTMLUListElement>(null);
 	const animRef = useRef(() => {});
 
-	const carouselSlides: CarouselSlide[] = useMemo(() => React.Children.map(children, (child, index) => {
-		const slide: CarouselSlide = {
-			child: React.cloneElement((child as JSX.Element), {
-				onSelectHandler: fn => {
-					slide.onSelectHandler = fn;
+	const carouselSlides: CarouselSlide[] = useMemo(() => React.Children.toArray(children)
+		.filter((child) => React.isValidElement(child))
+		.map((child: JSX.Element, index) => {
+			const slide: CarouselSlide = {
+				child: React.cloneElement(child, {...child.props,
+					onSelectHandler: fn => {
+						slide.onSelectHandler = fn;
+					}
+				}),
+				ref: React.createRef<HTMLLIElement>(),
+				onSelectHandler: null,
+				onAction: event => {
+					event.preventDefault();
+					getSlideElement(slide).focus({preventScroll: true});
+					setFocused(index, 'Click');
 				}
-			}),
-			ref: React.createRef<HTMLLIElement>(),
-			onSelectHandler: null,
-			onAction: event => {
-				event.preventDefault();
-				getSlideElement(slide).focus({preventScroll: true});
-				setFocused(index, 'Click');
-			}
-		};
-		return slide;
-	}), [children]);
+			};
+			return slide;
+		}), [children]);
 
 	const setFocused: SetFocusFn = (slideIndex, trigger, which) => {
 		if (!slideIndex) {
@@ -64,20 +66,20 @@ const Carousel: React.FC<CarouselProps> = ({children, ...props}) => {
 
 	const onKeyDown = (event: React.KeyboardEvent) => handleKeyboardNavigation(event, carouselSlides, focusedSlideIndex, setFocused);
 	const onArrowButtonMouseDown = (event, slidesToScroll) => animRef.current = handleArrowButtonsNavigation(event, carouselSlides, slidesToScroll, animRef, {
-		duration: settings.speed,
+		duration: settings.scrollDuration,
 		afterScrolling: () => settings.focusOnScroll && setFocused(null, 'Arrow', slidesToScroll > 0 ? 'Previous' : 'Next')
 	});
 
 	useEffect(() => {
-		animRef.current = handleSlideFocus(carouselSlides, focusedSlideIndex, settings.speed, animRef);
+		animRef.current = handleSlideFocus(carouselSlides, focusedSlideIndex, settings.scrollDuration, animRef);
 		prevFocusedSlideIndex.current = focusedSlideIndex;
-	}, [focusedSlideIndex, carouselSlides, settings.speed]);
+	}, [focusedSlideIndex, carouselSlides, settings.scrollDuration]);
 
 	useEffect(() => handleUserScrolling(scrollerRef.current, setFocused),
 		[focusedSlideIndex, carouselSlides, settings.focusOnScroll]);
 
 	useEffect(() => handleArrowsOnScroll(scrollerRef.current),
-		[carouselSlides, settings.arrows]);
+		[carouselSlides, settings.showArrows]);
 
 	return (
 		<div className="carousel" onKeyDown={onKeyDown} aria-orientation="horizontal">
