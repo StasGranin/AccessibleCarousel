@@ -57,6 +57,7 @@ const Carousel: React.FC<CarouselProps> = ({children, ...props}) => {
 			slideIndex = getFirstVisibleSlideIndex(carouselSlides)
 		}
 
+		slideIndex = Math.min(slideIndex, carouselSlides.length - 1); // Make sure we're not trying to access a removed slide
 		setFocusedSlideIndex(slideIndex);
 
 		settings.onSlideFocus && settings.onSlideFocus({
@@ -76,8 +77,16 @@ const Carousel: React.FC<CarouselProps> = ({children, ...props}) => {
 		});
 
 	useEffect(() => {
-		animRef.current = handleSlideFocus(carouselSlides[focusedSlideIndex], settings.scrollDuration, animRef);
-		prevFocusedSlideIndex.current = focusedSlideIndex;
+		const slidesCount = carouselSlides.length;
+
+		if (slidesCount) {
+			if (focusedSlideIndex > slidesCount - 1) {
+				setFocusedSlideIndex(slidesCount - 1);
+				return;
+			}
+			animRef.current = handleSlideFocus(carouselSlides[focusedSlideIndex], settings.scrollDuration, animRef);
+			prevFocusedSlideIndex.current = focusedSlideIndex;
+		}
 	}, [focusedSlideIndex, carouselSlides, settings.scrollDuration]);
 
 	useEffect(() => handleSwipe(scrollerRef.current, (direction, distance) => {

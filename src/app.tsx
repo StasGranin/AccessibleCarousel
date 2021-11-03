@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {render} from 'react-dom';
 
 import Carousel, {CustomDotsComponentProps, SwipeEvent} from './Carousel';
@@ -36,38 +36,39 @@ const CustomDots: React.FC<CustomDotsComponentProps> = ({carouselSlides, focused
 	return (<div className="customDots" onClick={() => onAction(focusedIndex+1, 'Dots')}>Press here to focus next item ({focusedIndex+1})</div>)
 }
 
+const CarouselWrapper: React.FC = () => {
+	const [itemsCount, setItemsCount] = useState(10);
+	const slides = new Array(itemsCount).fill(new Date().getTime(), 0, itemsCount);
+
+	return (
+		<div>
+			<button onClick={() => setItemsCount(Math.max(itemsCount - 1, 0))}>Remove Slides</button>
+			<div className="carouselContainer">
+				<Carousel
+					aria-label="My awesome carousel"
+					slidesToScroll={3}
+					focusOnScroll={true}
+					onSlideFocus={onCarouselEvent.bind(null, 'onSlideFocus')}
+					onSwipe={onCarouselEvent.bind(null, 'onSwipe')}
+					showArrows={true}
+					showDots={true}
+					/*dots={CustomDots}*/
+					prevArrow={<div className="carouselArrow"/>}
+					nextArrow={<div className="carouselArrow"/>}>
+					{slides.map((item, index) => <CarouselItem key={item} itemNumber={1} />)}
+				</Carousel>
+			</div>
+			<button onClick={() => setItemsCount(itemsCount + 1)}>Add Slides</button>
+		</div>);
+};
+
 const onCarouselEvent = (eventType: string, event: FocusEvent|SwipeEvent) => {
 	console.log(eventType, event);
 }
 
 const App = (
 	<div>
-		<button>Apple</button>
-			<div className="carouselContainer">
-			<Carousel
-				aria-label="My awesome carousel"
-				slidesToScroll={3}
-				focusOnScroll={true}
-				onSlideFocus={onCarouselEvent.bind(null, 'onSlideFocus')}
-				onSwipe={onCarouselEvent.bind(null, 'onSwipe')}
-				showArrows={true}
-				showDots={true}
-				/*dots={CustomDots}*/
-				prevArrow={<div className="carouselArrow"/>}
-				nextArrow={<div className="carouselArrow"/>}>
-				<CarouselItem itemNumber={1} />
-				<CarouselItem itemNumber={2} />
-				<CarouselItem itemNumber={3} />
-				<CarouselItem itemNumber={4} />
-				<CarouselItem itemNumber={5} />
-				<CarouselItem itemNumber={6} />
-				<CarouselItem itemNumber={7} />
-				<CarouselItem itemNumber={8} />
-				<CarouselItem itemNumber={9} />
-				<CarouselItem itemNumber={10} />
-			</Carousel>
-		</div>
-		<button>Pear</button>
+		<CarouselWrapper />
 	</div>
 );
 
