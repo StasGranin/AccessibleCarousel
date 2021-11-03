@@ -73,6 +73,7 @@ export const isElementInView = (element: HTMLElement): boolean => {
 export const scrollSlideToView = (slide: CarouselSlide, {duration, force, beforeScrolling, afterScrolling}: ScrollAnimationOptions) => {
 	const slideElement = getSlideElement(slide);
 	const scrollerElement = slideElement.parentElement;
+	const maxScrollingDestination = scrollerElement.scrollWidth - scrollerElement.clientWidth;
 	let scrollingDestination = slideElement.offsetLeft;
 
 	beforeScrolling && beforeScrolling();
@@ -86,7 +87,7 @@ export const scrollSlideToView = (slide: CarouselSlide, {duration, force, before
 		scrollingDestination = getNearestScrollSnapPoint(slideElement);
 	}
 
-	return animScrollTo(scrollerElement, scrollingDestination, duration, afterScrolling);
+	return animScrollTo(scrollerElement, Math.min(scrollingDestination, maxScrollingDestination), duration, afterScrolling);
 };
 
 export const scrollXSlides = (slides: CarouselSlide[], slidesToScroll: number, options: ScrollAnimationOptions) => {
