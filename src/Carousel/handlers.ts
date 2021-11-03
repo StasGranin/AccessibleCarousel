@@ -13,7 +13,7 @@ export const handleSwipe = (scrollerElement: HTMLElement, callback: (direction: 
 		scrollPosition = scrollerElement.scrollLeft;
 		loopHandle = setTimeout(() => {
 			if (scrollerElement.scrollLeft === scrollPosition) {
-				initialScrollPosition !== scrollPosition && callback(initialScrollPosition > scrollPosition ? 'Forward' : 'Back', Math.abs(initialScrollPosition-scrollPosition));
+				initialScrollPosition !== scrollPosition && callback(initialScrollPosition < scrollPosition ? 'Forward' : 'Back', Math.abs(initialScrollPosition-scrollPosition));
 			} else {
 				listen();
 			}

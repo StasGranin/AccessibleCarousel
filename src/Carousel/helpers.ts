@@ -60,12 +60,14 @@ export const getSlideElement = (slide: CarouselSlide): HTMLElement => slide.ref.
 
 export const isElementInView = (element: HTMLElement): boolean => {
 	const elementLeftPosition = element.offsetLeft;
-	const elementRightPosition = elementLeftPosition + element.clientWidth;
+	const elementWidth = element.clientWidth;
+	const elementRightPosition = elementLeftPosition + elementWidth;
 	const parentElement = element.parentElement;
 	const parentScrollPosition = parentElement.scrollLeft;
 	const parentWidth = parentElement.clientWidth;
+	const farEdge = elementWidth > parentWidth ? elementLeftPosition : elementRightPosition;
 
-	return (elementLeftPosition >= parentScrollPosition) && (elementRightPosition <= parentScrollPosition + parentWidth)
+	return elementLeftPosition >= parentScrollPosition && farEdge <= parentScrollPosition + parentWidth;
 }
 
 export const scrollSlideToView = (slide: CarouselSlide, {duration, force, beforeScrolling, afterScrolling}: ScrollAnimationOptions) => {
