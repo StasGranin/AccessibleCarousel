@@ -7,16 +7,17 @@ import './app.scss';
 type CarouselItemProps = {
 	onActionHook?: (fn: (any) => void) => void;
 	onFocusHook?: (fn: (any) => void) => void;
-	itemNumber: number
+	slideIndex?: number;
+	someProp: number;
 };
 
-const CarouselItem: React.FC<CarouselItemProps> = ({itemNumber, onActionHook, onFocusHook}) => {
+const CarouselItem: React.FC<CarouselItemProps> = ({someProp, slideIndex, onActionHook, onFocusHook}) => {
 	const onClick = () => {
-		console.log(`Clicked item no. ${itemNumber}`);
+		console.log(`Clicked item no. ${slideIndex}`);
 	};
 
 	const onFocus = () => {
-		console.log(`Focused item no. ${itemNumber}`);
+		console.log(`Focused item no. ${slideIndex}`);
 	};
 
 	useEffect(() => {
@@ -26,7 +27,7 @@ const CarouselItem: React.FC<CarouselItemProps> = ({itemNumber, onActionHook, on
 
 	return (
 		<div className="carouselTestItem" onClick={onClick} tabIndex={-1}>
-			<div className="text" aria-hidden={true}>Exhibit: {itemNumber}</div>
+			<div className="text" aria-hidden={true}>Exhibit: {slideIndex}</div>
 			<img src={`https://picsum.photos/200?t=${new Date().getTime()}`} alt="Some nice image"/>
 		</div>
 	)
@@ -55,7 +56,7 @@ const CarouselWrapper: React.FC = () => {
 					/*dots={CustomDots}*/
 					prevArrow={<div className="carouselArrow"/>}
 					nextArrow={<div className="carouselArrow"/>}>
-					{slides.map((item, index) => <CarouselItem key={item} itemNumber={1} />)}
+					{slides.map((item, index) => <CarouselItem key={item} someProp={index} />)}
 				</Carousel>
 			</div>
 			<button onClick={() => setItemsCount(itemsCount + 1)}>Add Slides</button>
