@@ -15,13 +15,28 @@
 				margin-right: 10px;
 				scroll-snap-align: start;
 
+				.slideNumber {
+					position: absolute;
+					left: 10px;
+					top: 2px;
+					font-size: 40px;
+					font-weight: bolder;
+					color: black;
+					opacity: 0.5;
+				}
+
 				.text {
 					position: absolute;
-					background: #444444;
-					padding: 5px;
-					left: 10px;
-					top: 10px;
 					color: white;
+					text-shadow: 0 0 5px black;
+					background: rgba(0,0,0,0.5);
+					font-size: 11px;
+					width: 160px;
+					padding: 10px 20px;
+					left: 0;
+					bottom: 0;
+					transform: translateY(100%);
+					transition: transform 0.3s;
 				}
 			}
 
@@ -29,8 +44,17 @@
 				margin-right: 0;
 			}
 
-			&:focus .carouselTestItem .text {
-				background: #77c20b;
+			&.focused .carouselTestItem  {
+				.slideNumber {
+					color: white;
+					text-shadow: 0 0 5px rgba(0,0,0,0.5);
+					opacity: 1;
+
+				}
+
+				.text {
+					transform: translateY(0%);
+				}
 			}
 		}
 

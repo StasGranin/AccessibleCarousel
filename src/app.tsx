@@ -12,6 +12,8 @@ type CarouselItemProps = {
 };
 
 const CarouselItem: React.FC<CarouselItemProps> = ({someProp, slideIndex, onActionHook, onFocusHook}) => {
+	const [joke, setJoke] = useState('');
+
 	const onClick = () => {
 		console.log(`Clicked item no. ${slideIndex}`);
 	};
@@ -23,12 +25,14 @@ const CarouselItem: React.FC<CarouselItemProps> = ({someProp, slideIndex, onActi
 	useEffect(() => {
 		onActionHook(onClick);
 		onFocusHook(onFocus);
+		fetch('https://icanhazdadjoke.com/', {headers: {'Accept': 'text/plain'}}).then(response => response.text().then(text => setJoke(text)));
 	}, []);
 
 	return (
 		<div className="carouselTestItem" onClick={onClick} tabIndex={-1}>
-			<div className="text" aria-hidden={true}>Exhibit: {slideIndex}</div>
-			<img src={`https://picsum.photos/200?t=${new Date().getTime()}`} alt="Some nice image"/>
+			<div className="slideNumber" aria-hidden={true}>{slideIndex+1}</div>
+			<img src={`https://picsum.photos/200?t=${new Date().getTime()}`} alt="Some nice image, and;"/>
+			<p className="text">{joke}</p>
 		</div>
 	)
 };

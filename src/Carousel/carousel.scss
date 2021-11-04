@@ -21,6 +21,7 @@
 
 		.slide {
 			display: inline-block;
+			white-space: normal;
 
 			&:focus {
 				outline: none;
