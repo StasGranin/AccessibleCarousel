@@ -5,12 +5,12 @@ import Carousel, {CustomDotsComponentProps, SwipeEvent} from './Carousel';
 import './app.scss';
 
 type CarouselItemProps = {
-	onActionHandler?: (fn: (any) => void) => void;
-	onFocusHandler?: (fn: (any) => void) => void;
+	onActionHook?: (fn: (any) => void) => void;
+	onFocusHook?: (fn: (any) => void) => void;
 	itemNumber: number
 };
 
-const CarouselItem: React.FC<CarouselItemProps> = ({itemNumber, onActionHandler, onFocusHandler}) => {
+const CarouselItem: React.FC<CarouselItemProps> = ({itemNumber, onActionHook, onFocusHook}) => {
 	const onClick = () => {
 		console.log(`Clicked item no. ${itemNumber}`);
 	};
@@ -20,14 +20,14 @@ const CarouselItem: React.FC<CarouselItemProps> = ({itemNumber, onActionHandler,
 	};
 
 	useEffect(() => {
-		onActionHandler(onClick);
-		onFocusHandler(onFocus);
+		onActionHook(onClick);
+		onFocusHook(onFocus);
 	}, []);
 
 	return (
 		<div className="carouselTestItem" onClick={onClick} tabIndex={-1}>
-			<div className="text">Carousel slide {itemNumber}</div>
-			<img src={`https://picsum.photos/200?t=${new Date().getTime()}`} alt="random image"/>
+			<div className="text" aria-hidden={true}>Exhibit: {itemNumber}</div>
+			<img src={`https://picsum.photos/200?t=${new Date().getTime()}`} alt="Some nice image"/>
 		</div>
 	)
 };
