@@ -1,6 +1,9 @@
 .carousel {
-	--prev-button-opacity: 0;
-	--next-button-opacity: 0;
+	--scrollPos: 0;
+	--carouselWidth: 0;
+	--itemsTotalWidth: 0;
+	--backArrowDisplay: 'none';
+	--forwardArrowDisplay: 'none';
 
 	position: relative;
 
@@ -35,11 +38,13 @@
 		cursor: pointer;
 
 		&.back {
-			opacity: var(--prev-button-opacity);
+			display: var(--backArrowDisplay);
+			opacity: min(calc(var(--scrollPos) / 20), 1);
 		}
 
 		&.forward {
-			opacity: var(--next-button-opacity);
+			display: var(--forwardArrowDisplay);
+			opacity: min(calc((var(--itemsTotalWidth) - var(--carouselWidth) - var(--scrollPos)) / 20), 1);
 		}
 	}
 

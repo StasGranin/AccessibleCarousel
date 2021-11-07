@@ -1,6 +1,7 @@
 import React from "react";
 import {Callback, CarouselSlide, ScrollAnimationOptions, SetFocusFn} from "./types";
 import {getSlideElement, scrollSlideToView, scrollXSlides} from "./helpers";
+import {setCssVars} from "./utils";
 
 export const handleSwipe = (scrollerElement: HTMLElement, callback: (direction: string, distance: number) => void): Callback => {
 	let scrollPosition = null;
@@ -33,11 +34,19 @@ export const handleSwipe = (scrollerElement: HTMLElement, callback: (direction: 
 	};
 };
 
-export const handleArrowsOnScroll = (scrollerElement: HTMLElement) => {
-	const carouselElementStyle = scrollerElement.parentElement.style;
+export const handleOnScroll = (scrollerElement: HTMLElement) => {
+	const {parentElement, clientWidth, scrollWidth} = scrollerElement;
+
 	const onScroll = () => {
-		carouselElementStyle.setProperty('--prev-button-opacity', Math.min(scrollerElement.scrollLeft / 20, 1).toString());
-		carouselElementStyle.setProperty('--next-button-opacity', Math.min((scrollerElement.scrollWidth - scrollerElement.scrollLeft - scrollerElement.clientWidth) / 20, 1).toString());
+		const {scrollLeft} = scrollerElement;
+
+		setCssVars(parentElement, {
+			scrollPos: scrollLeft,
+			carouselWidth: clientWidth,
+			itemsTotalWidth: scrollWidth,
+			backArrowDisplay: scrollLeft > 0 ? 'block' : 'none',
+			forwardArrowDisplay: scrollLeft < scrollWidth - clientWidth ? 'block' : 'none',
+		});
 	};
 
 	scrollerElement.addEventListener('scroll', onScroll);
@@ -69,7 +78,7 @@ export const handleKeyboardNavigation = (event: React.KeyboardEvent, carouselSli
 export const handleSlideFocus = (slide: CarouselSlide, animationDuration, scrollingAnimationRef: React.RefObject<Callback>): Callback => {
 	const slideElement = getSlideElement(slide);
 
-	slideElement !== document.activeElement && slideElement.focus({preventScroll: true});
+	slideElement !== document.activeElement && slideElement.focus({preventScroll: true}); // No need to fire the focus event twice on the same slide
 
 	return scrollSlideToView(slide, {
 		duration: animationDuration,

@@ -5,8 +5,8 @@ import Dots from "./Dots";
 import {CarouselSlide, CarouselProps, SetFocusFn} from '../types'
 import {
 	handleArrowButtonsNavigation,
-	handleArrowsOnScroll,
 	handleKeyboardNavigation,
+	handleOnScroll,
 	handleSlideFocus,
 	handleSwipe
 } from "../handlers";
@@ -112,10 +112,10 @@ const Carousel: React.FC<CarouselProps> = ({children, ...props}) => {
 		[focusedSlideIndex, carouselSlides, settings.focusOnScroll, settings.onSwipe]);
 
 	// Handle arrow buttons hide/show on carousel scrolling
-	useEffect(() => handleArrowsOnScroll(scrollerRef.current), [carouselSlides, settings.showArrows]);
+	useEffect(() => handleOnScroll(scrollerRef.current), [carouselSlides]);
 
 	// On unmount terminate the currently running scrolling animation loop
-	useEffect(() => animRef.current, []); // On unmount stop any running animation loop
+	useEffect(() => animRef.current, []);
 
 	return (
 		<div className="carousel" onKeyDown={onKeyDown} aria-orientation="horizontal" role="composite" aria-label={props['aria-label']}>

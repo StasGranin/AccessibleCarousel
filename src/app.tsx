@@ -25,7 +25,7 @@ const CarouselItem: React.FC<CarouselItemProps> = ({someProp, slideIndex, onActi
 	useEffect(() => {
 		onActionHook(onClick);
 		onFocusHook(onFocus);
-		fetch('https://icanhazdadjoke.com/', {headers: {'Accept': 'text/plain'}}).then(response => response.text().then(text => setJoke(text)));
+		//fetch('https://icanhazdadjoke.com/', {headers: {'Accept': 'text/plain'}}).then(response => response.text().then(text => setJoke(text)));
 	}, []);
 
 	return (
