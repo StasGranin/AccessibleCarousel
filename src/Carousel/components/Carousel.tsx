@@ -48,14 +48,14 @@ const Carousel: React.FC<CarouselProps> = ({children, ...props}) => {
 				onAction: event => { // What to do when clicking the item. It is called Action instead of Click to support other possible interaction options
 					event.preventDefault();
 					getSlideElement(slide).focus({preventScroll: true});
-					setFocused(index, 'Click');
+					setFocusedSlide(index, 'Click');
 				}
 			};
 			return slide;
 		}), [children]);
 
 	// Wrapper function over setFocusedSlideIndex(). Probably the most important function here
-	const setFocused: SetFocusFn = (slideIndex, trigger, which) => {
+	const setFocusedSlide: SetFocusFn = (slideIndex, trigger, which) => {
 		if (slideIndex === null) {
 			if (isElementInView(getSlideElement(carouselSlides[focusedSlideIndex]))) {
 				return;
@@ -75,14 +75,14 @@ const Carousel: React.FC<CarouselProps> = ({children, ...props}) => {
 	};
 
 	// Handle keyboard navigation
-	const onKeyDown = (event: React.KeyboardEvent) => handleKeyboardNavigation(event, carouselSlides, focusedSlideIndex, setFocused);
+	const onKeyDown = (event: React.KeyboardEvent) => handleKeyboardNavigation(event, carouselSlides, focusedSlideIndex, setFocusedSlide);
 
 	// Handle arrow button paging
 	const onArrowButtonMouseDown = (event, slidesToScroll) =>
 		animRef.current = handleArrowButtonsNavigation(event, carouselSlides, slidesToScroll, animRef, {
 			duration: settings.scrollDuration,
 			afterScrolling: () =>
-				settings.focusOnScroll && setFocused(null, 'Arrow', slidesToScroll > 0 ? 'Previous' : 'Next')
+				settings.focusOnScroll && setFocusedSlide(null, 'Arrow', slidesToScroll > 0 ? 'Previous' : 'Next')
 		});
 
 	// Handler for the focusedSlideIndex change
@@ -107,7 +107,7 @@ const Carousel: React.FC<CarouselProps> = ({children, ...props}) => {
 				firstVisibleSlideIndex: getFirstVisibleSlideIndex(carouselSlides)
 			});
 
-			settings.focusOnScroll && setFocused(null, 'Swipe', direction)
+			settings.focusOnScroll && setFocusedSlide(null, 'Swipe', direction)
 		}),
 		[focusedSlideIndex, carouselSlides, settings.focusOnScroll, settings.onSwipe]);
 
@@ -122,7 +122,7 @@ const Carousel: React.FC<CarouselProps> = ({children, ...props}) => {
 			<Arrow direction="back" settings={settings} onAction={onArrowButtonMouseDown} />
 			<Slides carouselSlides={carouselSlides} settings={settings} focusedIndex={focusedSlideIndex} scrollerRef={scrollerRef}/>
 			<Arrow direction="forward" settings={settings} onAction={onArrowButtonMouseDown} />
-			<Dots carouselSlides={carouselSlides} settings={settings} focusedIndex={focusedSlideIndex} onAction={setFocused}/>
+			<Dots carouselSlides={carouselSlides} settings={settings} focusedIndex={focusedSlideIndex} onAction={setFocusedSlide}/>
 		</div>);
 }
 

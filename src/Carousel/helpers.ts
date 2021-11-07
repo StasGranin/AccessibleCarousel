@@ -4,15 +4,12 @@ import {animScrollTo, getNearestScrollSnapPoint} from "./utils";
 export const getSlideElement = (slide: CarouselSlide): HTMLElement => slide.ref.current;
 
 export const isElementInView = (element: HTMLElement): boolean => {
-	const elementLeftPosition = element.offsetLeft;
-	const elementWidth = element.clientWidth;
-	const elementRightPosition = elementLeftPosition + elementWidth;
-	const parentElement = element.parentElement;
+	const {offsetLeft, clientWidth, parentElement} = element;
 	const parentScrollPosition = parentElement.scrollLeft;
 	const parentWidth = parentElement.clientWidth;
-	const farEdge = elementWidth > parentWidth ? elementLeftPosition : elementRightPosition;
+	const farEdge = clientWidth > parentWidth ? offsetLeft : offsetLeft + clientWidth; // Handle a case where the slide is wider than the carousel
 
-	return elementLeftPosition >= parentScrollPosition && farEdge <= parentScrollPosition + parentWidth;
+	return (offsetLeft >= parentScrollPosition) && (farEdge <= parentScrollPosition + parentWidth);
 }
 
 export const scrollSlideToView = (slide: CarouselSlide, {duration, force, beforeScrolling, afterScrolling}: ScrollAnimationOptions): Callback => {
