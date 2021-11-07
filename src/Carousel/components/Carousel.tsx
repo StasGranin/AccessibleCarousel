@@ -118,7 +118,7 @@ const Carousel: React.FC<CarouselProps> = ({children, ...props}) => {
 	useEffect(() => animRef.current, []);
 
 	return (
-		<div className="carousel" onKeyDown={onKeyDown} aria-orientation="horizontal" role="composite" aria-label={props['aria-label']}>
+		<div className="carousel" onKeyDown={onKeyDown} aria-orientation="horizontal" role="carousel" aria-label={props['aria-label']}>
 			<Arrow direction="back" settings={settings} onAction={onArrowButtonMouseDown} />
 			<Slides carouselSlides={carouselSlides} settings={settings} focusedIndex={focusedSlideIndex} scrollerRef={scrollerRef}/>
 			<Arrow direction="forward" settings={settings} onAction={onArrowButtonMouseDown} />
