@@ -38,9 +38,10 @@ export const handleOnScroll = (scrollerElement: HTMLElement) => {
 	const {parentElement, clientWidth, scrollWidth} = scrollerElement;
 
 	const onScroll = () => {
-		const {scrollLeft} = scrollerElement;
+		const {scrollLeft, childNodes} = scrollerElement;
 
 		setCssVars(parentElement, {
+			slidesCount: childNodes.length,
 			scrollPos: scrollLeft,
 			carouselWidth: clientWidth,
 			itemsTotalWidth: scrollWidth,

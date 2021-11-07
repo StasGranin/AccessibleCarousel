@@ -5,7 +5,6 @@ const Slides: React.FC<SlidesProps> = ({carouselSlides, settings, focusedIndex, 
 	(<ul className="scroller" ref={scrollerRef}>
 		{carouselSlides.map((slide, index) => (
 			<li className={`slide ${index === focusedIndex ? 'focused' : ''}`} key={index} ref={slide.ref}
-
 			    tabIndex={index === focusedIndex ? 0 : -1}
 			    onFocus={()=>slide.onFocusHandler && slide.onFocusHandler()}
 			    onMouseDown={(event) => slide.onAction(event)}>

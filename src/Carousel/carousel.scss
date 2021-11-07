@@ -1,4 +1,8 @@
+
 .carousel {
+	// These convenience variables are set in runtime
+	// Use them (wisely) to create nifty css effects
+	--slidesCount: 0;
 	--scrollPos: 0;
 	--carouselWidth: 0;
 	--itemsTotalWidth: 0;
