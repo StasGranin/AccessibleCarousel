@@ -1,6 +1,7 @@
 import React from "react";
 
 export type CarouselSlide = {
+	index: number;
 	child: React.ReactNode; // Slide React component extended with carousel hooks
 	ref: React.RefObject<HTMLLIElement> | null; // Since most of the dirty work is node with proper DOM manipulation (as God intended to), we need to keep the dom node around
 	onActionHandler: Callback; // If provided by the Slide.child, Carousel will call this function on pressing the Enter key
@@ -44,9 +45,9 @@ export type CarouselProps = {
 	prevArrow?: JSX.Element;
 	nextArrow?: JSX.Element;
 	showDots?: boolean;
-	dots?: (CustomDotsComponentProps) => JSX.Element;
-	onSlideFocus?: (CarouselEvent) => void;
-	onSwipe?: (SwipeEvent) => void;
+	dots?: (props: CustomDotsComponentProps) => JSX.Element;
+	onSlideFocus?: (event: FocusEvent) => void;
+	onSwipe?: (event: SwipeEvent) => void;
 };
 
 export type SlidesProps = {
